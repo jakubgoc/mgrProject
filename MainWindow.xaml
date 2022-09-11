@@ -1,0 +1,29 @@
+﻿<Window x:Class="OscilloscopeReader.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Oscilloscope Helper Application" Height="450" Width="800" ResizeMode="NoResize">
+    <Grid Margin="0,0,0,-6">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="10" />
+            <ColumnDefinition Width="780" />
+            <ColumnDefinition Width="10" />
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100" />
+            <RowDefinition Height="150" />
+            <RowDefinition Height="100" />
+        </Grid.RowDefinitions>
+
+        <Label FontSize="20" Width="auto" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Grid.Column="1">Oscilloscope Reader Application</Label>
+        <Label Name="result" FontSize="20" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Grid.Row="2" Margin="0,125,0,-66" Grid.Column="1" Content=" "/>
+        <Button Click="ChooseFileButtonClick" Grid.Row="1" Grid.Column="1" Margin="46,0,599,86" Height="64" VerticalAlignment="Bottom">Browse file</Button>
+        <Button Click="PlotHysteresis" Tag="{Binding Code}" Grid.Row="1" Grid.Column="1" Margin="0,69,599,18" Content="Plot hysteresis" HorizontalAlignment="Right" Width="135"/>
+        <Button Click="PlotArctang" Tag="{Binding Code}" Grid.Row="1" Grid.Column="1" Margin="46,0,599,49" Content="Plot arctan" Height="64" VerticalAlignment="Bottom" Grid.RowSpan="2"/>
+        <Button Click="CalculateHysteresisArea" Tag="{Binding Code}" Grid.Row="2" Grid.Column="1" Margin="46,56,599,-20" Content="Calculate area"/>
+        <Label x:Name="result_Copy" FontSize="20" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Grid.Row="2" Margin="230,68,230,-8" Content="" Grid.Column="1"/>
+    </Grid>
+</Window>
