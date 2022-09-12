@@ -1,7 +1,10 @@
 import csv
 import math
 import sys
+import pyvisa
 from matplotlib import pyplot as pyplot
+
+rm = pyvisa.ResourceManager()
 
 helper_list_in_s = []
 helper_list_C1_in_V = []
@@ -25,6 +28,53 @@ k = 0
 
 ostatecznyX = []
 ostatecznyY = []
+
+def pyvisa_manger():
+    serialInstrumentAtComPort1 = rm.list_resources()[0]
+    oscilloscope = rm.open_resource(serialInstrumentAtComPort1)
+    print(oscilloscope)
+
+    #Reset the device
+    #oscilloscope.query('*RST')
+
+    #Returns the instrument identification.
+    print(oscilloscope.query("*IDN?"))
+
+    #Queries the number of horizontal divisions on the screen.
+    print(oscilloscope.query("TIMebase:DIVisions?"))
+
+    #Queries the real acquisition time used in the hardware.
+    # If FFT analysis is performed, the value can differ from the adjusted
+    # acquisition time (TIMebase:ACQTime). #wartosc podstawy czasu
+    print(oscilloscope.query("TIMebase:RATime?"))
+
+    #Enables the function generator and outputs the waveform.
+    #oscilloscope.query("WGENerator:OUTPut[:ENABle] ON")
+
+
+    #oscilloscope.query("BPLot: OUTPut CH1 | CH2]")
+
+    oscilloscope.query("FORM CSV")
+    oscilloscope.query("CHAN:DATA:POIN DMAX")
+    oscilloscope.query("SING;*OPC?")
+    print(oscilloscope.query("CHAN:DATA:HEAD?"))
+    print(oscilloscope.query("CHAN:DATA?"))
+
+    #List of values according to the format settings -
+    # the voltages of recorded waveform samples.
+    # print(oscilloscope.query("FORM CSV"))
+    # print(oscilloscope.query("CHAN1:DATA?"))
+
+    #Sets the number of waveforms acquired with RUNSingle. (here 2)
+    oscilloscope.query("ACQuire:NSINgle:COUNt 2")
+    oscilloscope.query("RUNSingle")
+
+    # Executes saving a waveform, for which the path and filename
+    # have been defined by EXPort:WAVeform:NAME.
+    oscilloscope.query("EXPort:WAVeform:SOURce CH1 | CH2")
+    oscilloscope.query("EXPort:WAVeform:NAME HysteresisPlot")
+    oscilloscope.query('EXP:WFMS:DEST "/USB_FRONT/WFM"')
+    oscilloscope.query("EXPort:WAVeform:SAVE")
 
 
 def read_csv_file():
@@ -142,10 +192,12 @@ def plot_hysteresis():
     pyplot.xlabel('C2 [V]')
     pyplot.title('Hysteresis plot')
 
+pyvisa_manger()
 
-read_csv_file()
-calculate_arctan()
-calculate_hysteresis_period()
-calculate_final_arctan_values()
-calculate_hysteresis_area()
-plot_figures()
+#E:\Program Files\PuTTY
+# read_csv_file()
+# calculate_arctan()
+# calculate_hysteresis_period()
+# calculate_final_arctan_values()
+#calculate_hysteresis_area()
+#plot_figures()
